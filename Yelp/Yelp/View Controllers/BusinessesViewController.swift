@@ -31,9 +31,13 @@ class BusinessesViewController: UIViewController {
         
         
         
-        searchBar.sizeToFit()
+//        searchBar.sizeToFit()
 //        navigationItem.titleView = searchBar
+        navigationController?.navigationBar.barTintColor = UIColor.blue
         navigationController?.navigationBar.addSubview(searchBar)
+//        navigationController?.navigationBar.bringSubview(toFront: searchBar)
+        
+        
 
         Business.search(with: "") { (businesses: [Business]?, error: Error?) in
             if let businesses = businesses {
@@ -60,6 +64,13 @@ class BusinessesViewController: UIViewController {
             }
         }
         */
+    }
+    
+    override func viewWillLayoutSubviews() {
+        let navBarHeight = self.navigationController?.navigationBar.frame.height
+        let y = (navBarHeight! - 20) / 2
+        let screenWidth = tableView.superview!.frame.width
+        searchBar.frame = CGRect(x: 70, y: y, width: screenWidth - 150, height: 20)
     }
     
     func onSearch() {
