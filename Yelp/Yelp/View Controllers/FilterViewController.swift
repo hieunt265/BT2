@@ -22,7 +22,9 @@ class FilterViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         tableVIew.dataSource = self
-        tableVIew.dataSource = self
+        tableVIew.delegate = self
+        
+        filterModeAfter = filterModelBefore
         
 
         // Do any additional setup after loading the view.
@@ -79,9 +81,9 @@ extension FilterViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0 : return 1
-        case 1: return filterModelBefore.distance.count
-        case 2: return filterModelBefore.sortBy.count
-        case 3: return filterModelBefore.categories.count
+        case 1: return filterModeAfter.distance.count
+        case 2: return filterModeAfter.sortBy.count
+        case 3: return filterModeAfter.categories.count
         default: return 0
         }
     }
@@ -90,20 +92,21 @@ extension FilterViewController: UITableViewDelegate, UITableViewDataSource {
         switch indexPath.section {
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: "switchCell") as! SwitchCell
-            cell.config(with: "Offering a Deal", isOn: filterModelBefore.isDeal)
+            cell.config(with: "Offering a Deal", isOn: filterModeAfter.isDeal)
             cell.delegate = self
             return cell
         case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: "checkCell") as! CheckCell
-            cell.config(name: filterModelBefore.distance[indexPath.row].name, isCheck: filterModelBefore.distance[indexPath.row].isOn)
+            cell.config(name: filterModeAfter.distance[indexPath.row].name, isCheck: filterModeAfter.distance[indexPath.row].isOn)
+            print("\(cell.nameLabel.text) - \(cell.isCheck)")
             return cell
         case 2:
             let cell = tableView.dequeueReusableCell(withIdentifier: "checkCell") as! CheckCell
-            cell.config(name: filterModelBefore.sortBy[indexPath.row].name, isCheck: filterModelBefore.sortBy[indexPath.row].isOn)
+            cell.config(name: filterModeAfter.sortBy[indexPath.row].name, isCheck: filterModeAfter.sortBy[indexPath.row].isOn)
             return cell
         case 3:
             let cell = tableView.dequeueReusableCell(withIdentifier: "switchCell") as! SwitchCell
-            cell.config(with: filterModelBefore.categories[indexPath.row].name, isOn: filterModelBefore.categories[indexPath.row].isOn)
+            cell.config(with: filterModeAfter.categories[indexPath.row].name, isOn: filterModeAfter.categories[indexPath.row].isOn)
             cell.delegate = self
             return cell
         default:
@@ -111,6 +114,30 @@ extension FilterViewController: UITableViewDelegate, UITableViewDataSource {
             return cell
         }
     }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        switch indexPath.section {
+        case 0: break
+        case 1:
+            for index in 0...filterModeAfter.distance.count-1 {
+                filterModeAfter.distance[index].isOn = false
+                if index == indexPath.row {
+                    filterModeAfter.distance[index].isOn = true
+                }
+            }
+            tableVIew.reloadData()
+        case 2:
+            for index in 0...filterModeAfter.sortBy.count-1 {
+                filterModeAfter.sortBy[index].isOn = false
+                if index == indexPath.row {
+                    filterModeAfter.sortBy[index].isOn = true
+                }
+            }
+            tableVIew.reloadData()
+        default: break
+        }
+    }
+    
+    
 }
 
 

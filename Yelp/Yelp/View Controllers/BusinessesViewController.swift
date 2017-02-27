@@ -33,40 +33,16 @@ class BusinessesViewController: UIViewController {
         
         
         
-//        searchBar.sizeToFit()
-//        navigationItem.titleView = searchBar
         navigationController?.navigationBar.barTintColor = UIColor.blue
         navigationController?.navigationBar.addSubview(searchBar)
-//        navigationController?.navigationBar.bringSubview(toFront: searchBar)
-        
-        
 
         Business.search(with: "") { (businesses: [Business]?, error: Error?) in
             if let businesses = businesses {
                 self.businesses = businesses
-
-//                for business in businesses {
-//                    self.businesses.append(business)
-//                    self.tableView.reloadData()
-//                }
                 self.tableView.reloadData()
             }
         }
-        
 
-        // Example of Yelp search with more search options specified
-        /*
-        Business.search(with: "Restaurants", sort: .Distance, categories: ["asianfusion", "burgers"], deals: true) { (businesses: [Business]?, error: Error?) in
-            if let businesses = businesses {
-                self.businesses = businesses
-
-                for business in businesses {
-                    print(business.name!)
-                    print(business.address!)
-                }
-            }
-        }
-        */
     }
     
     override func viewWillLayoutSubviews() {
@@ -98,11 +74,13 @@ class BusinessesViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let navigationController = segue.destination as! UINavigationController
-    
         if navigationController.topViewController is FilterViewController {
             let filtersViewController = navigationController.topViewController as! FilterViewController
             filtersViewController.delegate = self
+            filtersViewController.filterModelBefore = filterMode
         }
+
+        
         
     }
     
