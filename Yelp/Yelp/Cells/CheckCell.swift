@@ -8,10 +8,14 @@
 
 import UIKit
 
+
+
 class CheckCell: UITableViewCell {
 
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var checkImage: UIImageView!
+
+    
     var isCheck: Bool = false {
         didSet {
             checkImage.isHidden = !(isCheck)
@@ -23,6 +27,7 @@ class CheckCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        
     }
     
     func config(name: String, isCheck: Bool) {
@@ -35,5 +40,7 @@ class CheckCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
+    
+    
 
 }

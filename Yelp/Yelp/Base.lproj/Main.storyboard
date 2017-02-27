@@ -245,8 +245,16 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Filter" id="Va7-an-q9o">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="Byh-sr-Lgc"/>
-                        <barButtonItem key="rightBarButtonItem" title="Save" id="k41-Dd-dpx"/>
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="Byh-sr-Lgc">
+                            <connections>
+                                <action selector="onCancel:" destination="T1s-Tj-d85" id="M5a-cP-Q4Z"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Save" id="k41-Dd-dpx">
+                            <connections>
+                                <action selector="onSave:" destination="T1s-Tj-d85" id="qwf-69-A9N"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="tableVIew" destination="gOr-Cd-e0A" id="nl3-KB-biw"/>

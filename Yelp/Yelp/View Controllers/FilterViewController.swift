@@ -8,10 +8,16 @@
 
 import UIKit
 
+protocol FilterViewControllerDelegate {
+    func filterUpdate(didUpdate: Filter)
+}
+
 class FilterViewController: UIViewController {
     
     @IBOutlet weak var tableVIew: UITableView!
-    var filterModel = Filter()
+    var filterModelBefore = Filter()
+    var filterModeAfter = Filter()
+    var delegate: FilterViewControllerDelegate?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,6 +34,18 @@ class FilterViewController: UIViewController {
     }
     
 
+    @IBAction func onSave(_ sender: UIBarButtonItem) {
+        self.dismiss(animated: true) {
+            self.delegate?.filterUpdate(didUpdate: self.filterModeAfter)
+        }
+    }
+
+    
+    @IBAction func onCancel(_ sender: UIBarButtonItem) {
+        self.dismiss(animated: true) { 
+            self.delegate?.filterUpdate(didUpdate: self.filterModelBefore)
+        }
+    }
     /*
     // MARK: - Navigation
 
@@ -43,7 +61,7 @@ class FilterViewController: UIViewController {
 
 // MARK: Table View
 
-extension FilterViewController: UITabBarDelegate, UITableViewDataSource {
+extension FilterViewController: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         return 4
     }
@@ -61,9 +79,9 @@ extension FilterViewController: UITabBarDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0 : return 1
-        case 1: return filterModel.distance.count
-        case 2: return filterModel.sortBy.count
-        case 3: return filterModel.yelpCategories().count
+        case 1: return filterModelBefore.distance.count
+        case 2: return filterModelBefore.sortBy.count
+        case 3: return filterModelBefore.categories.count
         default: return 0
         }
     }
@@ -72,24 +90,43 @@ extension FilterViewController: UITabBarDelegate, UITableViewDataSource {
         switch indexPath.section {
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: "switchCell") as! SwitchCell
-            cell.config(with: "Offering a Deal", isOn: filterModel.isDeal)
+            cell.config(with: "Offering a Deal", isOn: filterModelBefore.isDeal)
+            cell.delegate = self
             return cell
         case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: "checkCell") as! CheckCell
-            cell.config(name: filterModel.distance[indexPath.row].name, isCheck: filterModel.distance[indexPath.row].isOn)
+            cell.config(name: filterModelBefore.distance[indexPath.row].name, isCheck: filterModelBefore.distance[indexPath.row].isOn)
             return cell
         case 2:
             let cell = tableView.dequeueReusableCell(withIdentifier: "checkCell") as! CheckCell
-            cell.config(name: filterModel.sortBy[indexPath.row].name, isCheck: filterModel.sortBy[indexPath.row].isOn)
+            cell.config(name: filterModelBefore.sortBy[indexPath.row].name, isCheck: filterModelBefore.sortBy[indexPath.row].isOn)
             return cell
         case 3:
             let cell = tableView.dequeueReusableCell(withIdentifier: "switchCell") as! SwitchCell
-            cell.config(with: filterModel.categories[indexPath.row].name, isOn: filterModel.categories[indexPath.row].isOn)
+            cell.config(with: filterModelBefore.categories[indexPath.row].name, isOn: filterModelBefore.categories[indexPath.row].isOn)
+            cell.delegate = self
             return cell
         default:
             let cell = UITableViewCell()
             return cell
         }
     }
+}
+
+
+
+// MARK: delegate
+
+extension FilterViewController: SwitchCellDelegate {
+    func switchCell(switchCell: SwitchCell, didChangeValue value: Bool) {
+        let index = tableVIew.indexPath(for: switchCell)
+        if index?.section == 0 {
+            filterModeAfter.isDeal = value
+        }else if index?.section == 3 {
+            filterModeAfter.categories[(index?.row)!].isOn = value
+        }
+        print("\(filterModeAfter.categories[(index?.row)!].name) : \(filterModeAfter.categories[(index?.row)!].isOn) ")
+    }
+    
 }
 

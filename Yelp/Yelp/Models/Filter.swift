@@ -31,7 +31,7 @@ class Filter {
     }
     
     
-    func yelpCategories() -> [[String: String]] {
+    private func yelpCategories() -> [[String: String]] {
         return [["name" : "Afghan", "code": "afghani"],
                 ["name" : "African", "code": "african"],
                 ["name" : "American, New", "code": "newamerican"],

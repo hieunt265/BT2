@@ -8,14 +8,23 @@
 
 import UIKit
 
+protocol SwitchCellDelegate {
+    func switchCell(switchCell: SwitchCell, didChangeValue value: Bool)
+}
+
 class SwitchCell: UITableViewCell {
 
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var switchValue: UISwitch!
+    var delegate: SwitchCellDelegate!
+    
+    
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
         switchValue.isOn = false
+        switchValue.addTarget(self, action: #selector(switchUpdateValue), for: .valueChanged)
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -27,6 +36,12 @@ class SwitchCell: UITableViewCell {
     func config(with name: String, isOn: Bool) {
         nameLabel.text = name
         switchValue.isOn = isOn
+    }
+    
+    func switchUpdateValue() {
+        if delegate != nil {
+            delegate?.switchCell(switchCell: self, didChangeValue: switchValue.isOn)
+        }
     }
 
 }

@@ -17,6 +17,8 @@ class BusinessesViewController: UIViewController {
     
     var searchBar = UISearchBar()
     var activityIndicatorView = UIActivityIndicatorView()
+    var filterMode = Filter()
+    var filterDelegate: FilterViewControllerDelegate?
     
     
     override func viewDidLoad() {
@@ -43,10 +45,11 @@ class BusinessesViewController: UIViewController {
             if let businesses = businesses {
                 self.businesses = businesses
 
-                for business in businesses {
-                    self.businesses.append(business)
-                    self.tableView.reloadData()
-                }
+//                for business in businesses {
+//                    self.businesses.append(business)
+//                    self.tableView.reloadData()
+//                }
+                self.tableView.reloadData()
             }
         }
         
@@ -91,6 +94,16 @@ class BusinessesViewController: UIViewController {
             }
             
         }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let navigationController = segue.destination as! UINavigationController
+    
+        if navigationController.topViewController is FilterViewController {
+            let filtersViewController = navigationController.topViewController as! FilterViewController
+            filtersViewController.delegate = self
+        }
+        
     }
     
 
@@ -138,4 +151,43 @@ extension BusinessesViewController: UISearchBarDelegate {
         searchBar.resignFirstResponder()
     }
     
+}
+
+
+extension BusinessesViewController: FilterViewControllerDelegate {
+    func filterUpdate(didUpdate: Filter) {
+        filterMode = didUpdate
+        
+        var distance: Float?
+        var categories = [String]()
+        var sortBy = YelpSortMode(rawValue: 0)
+        
+        for item in filterMode.categories {
+            if item.isOn {
+                categories.append(item.code)
+            }
+        }
+        
+        for item in filterMode.distance {
+            if item.isOn {
+                distance = item.value
+                break
+            }
+        }
+        for item in filterMode.sortBy {
+            if item.isOn {
+                sortBy = item.value
+                break
+            }
+        }
+        
+        Business.search(with: searchBar.text!, sort: sortBy, categories: categories, distance: distance, deals: filterMode.isDeal) { (businesses, error) in
+            if let businesses = businesses {
+                self.businesses = businesses
+                
+                self.tableView.reloadData()
+            }
+        }
+        
+    }
 }
