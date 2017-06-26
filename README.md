@@ -43,7 +43,7 @@ Please list two areas of the assignment you'd like to **discuss further with you
 
 Here's a walkthrough of implemented user stories:
 
-<img src='https://github.com/nthnhung237/CS_Week2/blob/master/new_yelp_starter-master/Yelp%20project.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='https://github.com/hieunt265/BT2/blob/master/Yelp.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
