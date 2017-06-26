@@ -2,7 +2,7 @@
 //  FilterViewController.swift
 //  Yelp
 //
-//  Created by Nguyen Nam Long on 2/26/17.
+//  Created by Nguyen Trung Hieu on 6/26/17.
 //  Copyright © 2017 CoderSchool. All rights reserved.
 //
 
